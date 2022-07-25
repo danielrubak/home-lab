@@ -1,0 +1,65 @@
+version: "3.8"
+
+networks:
+  n8n_net:
+    driver: bridge
+
+services:
+  postgres:
+    image: postgres:alpine
+    container_name: "n8n-db"
+    networks:
+      - n8n_net
+    ports:
+      - 5433:5432
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+      - POSTGRES_DB=${POSTGRES_DB:-postgres}
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - /volume1/docker/n8n/db:/var/lib/postgresql/data
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "sh -c 'pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-postgres}'"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  flyway:
+    image: flyway/flyway:latest
+    container_name: "n8n-db-updater"
+    networks:
+      - n8n_net
+    command: -url=jdbc:postgresql://postgres:5432/${POSTGRES_DB:-postgres} -user=${POSTGRES_USER:-postgres} -password=${POSTGRES_PASSWORD:-postgres} -connectRetries=60 migrate
+    volumes:
+      - /volume1/docker/n8n/migrations:/flyway/sql
+  n8n:
+    image: n8nio/n8n
+    container_name: "n8n-app"
+    networks:
+      - n8n_net
+    ports:
+      - 5678:5678
+    environment:
+      - N8N_BASIC_AUTH_ACTIVE=true
+      - N8N_BASIC_AUTH_USER=${N8N_USER:?err}
+      - N8N_BASIC_AUTH_PASSWORD=${N8N_PASSWORD:?err}
+      - N8N_HOST=${N8N_HOST:?err}
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=https
+      - N8N_METRICS=true
+      - NODE_ENV=production
+      - WEBHOOK_URL=${N8N_WEBHOOK_URL:?err}
+      - GENERIC_TIMEZONE=Europe/Warsaw
+      - DB_TYPE=postgresdb
+      - DB_POSTGRESDB_HOST=postgres
+      - DB_POSTGRESDB_DATABASE=${POSTGRES_DB:-postgres}
+      - DB_POSTGRESDB_USER=${POSTGRES_USER:-postgres}
+      - DB_POSTGRESDB_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+    volumes:
+      - /volume1/docker/n8n/n8n:/home/node/.n8n
+      - /volume1/docker/n8n/files:/files
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
