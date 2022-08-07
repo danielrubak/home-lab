@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  pihole:
+    image: pihole/pihole:latest
+    container_name: pihole
+    network_mode: host
+    environment:
+      - TZ=Europe/Warsaw
+      - WEBPASSWORD=${PIHOLE_PASSWORD:-admin}
+      - PIHOLE_UID=${PIHOLE_UID:?err}
+      - PIHOLE_GID=${PIHOLE_GID:?err}
+      - WEB_UID=${PIHOLE_UID:?err}
+      - WEB_GID=${PIHOLE_GID:?err}
+      - DNSMASQ_LISTENING=local
+      - WEB_PORT=${PIHOLE_WEBPORT:-8500}
+      - VIRTUAL_HOST=${PIHOLE_VIRTUAL_HOST:?err}
+    volumes:
+      - /volume1/docker/pihole/dnsmasq.d:/etc/dnsmasq.d
+      - /volume1/docker/pihole/pihole:/etc/pihole
+    restart: unless-stopped

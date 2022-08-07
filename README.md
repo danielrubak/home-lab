@@ -2,19 +2,25 @@
 
 This repository contains the definitions of my home lab services. All of them are running on my Synology 920+ using Docker package from Synology Package Center.
 
-## Docker Compose
+## Docker Compose specification
 
-image
-container_name
-networks
-network_mode
-command
-ports
-environment
-volumes
-restart
-depends_on
-healthcheck
+The following elements are used in the docker compose config files:
+
+| Element        | Description                                                                                       |
+| -------------- | ------------------------------------------------------------------------------------------------- |
+| image          | Specifies the image to start the container from                                                   |
+| container_name | Specifies a custom container name                                                                 |
+| networks       | Defines the networks that service containers are attached to                                      |
+| network_mode   | Sets service containers network mode                                                              |
+| command        | Overrides the default command declared by the container image                                     |
+| ports          | Exposes container ports                                                                           |
+| environment    | Defines environment variables set in the container                                                |
+| volumes        | Defines mount host paths or named volumes that MUST be accessible by service containers           |
+| restart        | Defines the policy that the platform will apply on container termination                          |
+| depends_on     | Expresses startup and shutdown dependencies between services                                      |
+| healthcheck    | Declares a check that’s run to determine whether or not containers for this service are “healthy” |
+
+More information about other elements you can find in [Compose Specification](https://docs.docker.com/compose/compose-file/).
 
 ## Heimdall
 
@@ -93,6 +99,34 @@ Additionally, service setup requires few environment variables. All of them you 
 | NPM_DB_USER          | mariadb default user       |
 | NPM_DB_USER_PASSWORD | mariadb default password   |
 | NPM_DB_NAME          | mariadb database name      |
+
+## Pihole
+
+Pi-hole is an application for blocking advertisements and a DNS server.
+
+Before installing, you need to create a following directory structure in the docker folder:
+
+```bash
+.
+|-- pihole
+|   |-- dnsmasq.d
+|   |-- pihole
+```
+
+Purpose of above directory structure:
+
+- dnsmasq.d - DNS configuration
+- pihole - pihole configuration
+
+Additionally, service setup requires few environment variables. All of them you can find in the `.dev.env` file. Change the values of these variables and a name of the file to `.env`.
+
+| Variable            | Description                                                       |
+| ------------------- | ----------------------------------------------------------------- |
+| PIHOLE_UID          | process user ID                                                   |
+| PIHOLE_GID          | process group ID                                                  |
+| PIHOLE_PASSWORD     | pihole password                                                   |
+| PIHOLE_VIRTUAL_HOST | pihole hostname for get access to the service using reverse proxy |
+| PIHOLE_WEBPORT      | web app port                                                      |
 
 ## Portainer
 
