@@ -65,15 +65,15 @@ Additionally, service setup requires few environment variables. All of them you 
 
 Flyway is a database migration tool. You can find more information [here](https://flywaydb.org/documentation/)
 
-## Ngnix Proxy Manager
+## Nginx Proxy Manager
 
-Ngnix Proxy Manager is a reverse proxy, can be used to redirects the url requests to provided locations.
+Nginx Proxy Manager is a reverse proxy, can be used to redirects the url requests to provided locations.
 
 Before installing, you need to create a following directory structure in the docker folder:
 
 ```bash
 .
-|-- ngnix-proxy
+|-- nginx-proxy
 |   |-- data
 |   |-- db
 |   |-- letsencrypt
@@ -81,7 +81,7 @@ Before installing, you need to create a following directory structure in the doc
 
 Purpose of above directory structure:
 
-- data - ngnix proxy manager service configuration
+- data - nginx proxy manager service configuration
 - db - all database related stuff will be stored here
 - letsencrypt - folder for your certificates
 
@@ -93,3 +93,60 @@ Additionally, service setup requires few environment variables. All of them you 
 | NPM_DB_USER          | mariadb default user       |
 | NPM_DB_USER_PASSWORD | mariadb default password   |
 | NPM_DB_NAME          | mariadb database name      |
+
+## Portainer
+
+Portainer is a self-service container service delivery platform. It is the definitive container management GUI for Kubernetes, Docker and Swarm.
+
+Before installing, you need to create a following directory structure in the docker folder:
+
+```bash
+.
+|-- portainer
+|   |-- data
+|   |-- docker-compose.yml
+```
+
+### Update the Portainer container
+
+Follow the steps:
+
+- Connect to the Synology using ssh:
+
+  ```bash
+  ssh username@SYNOLOGY_IP -p PORT_NUMBER
+  ```
+
+- Run the command below to get the container ID for Portainer
+
+  ```bash
+  sudo docker container ls
+  ```
+
+- Run the command below to stop the Portainer container
+
+  ```bash
+  sudo docker stop portainer
+  # if the command above does not work, stop the container using the container ID
+  sudo docker stop [CONTAINER_ID]
+  ```
+
+- Delete the Portainer container
+
+  ```bash
+  sudo docker rm portainer
+  # if the command above does not work, remove the container using the container ID
+  sudo docker rm [CONTAINER_ID]
+  ```
+
+- Change your current working directory
+
+  ```bash
+  cd /volume1/docker/portainer
+  ```
+
+- Use Docker Compose to run new Portainer container
+
+  ```bash
+  sudo docker-compose up -d
+  ```
