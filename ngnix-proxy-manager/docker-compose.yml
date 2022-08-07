@@ -1,15 +1,15 @@
 version: '3.8'
 
 networks:
-  ngnix_proxy_net:
+  nginx_proxy_net:
     driver: bridge
 
 services:
-  ngnix:
+  nginx:
     image: 'jc21/nginx-proxy-manager:latest'
-    container_name: 'ngnix-proxy-app'
+    container_name: 'nginx-proxy-app'
     networks:
-      - ngnix_proxy_net
+      - nginx_proxy_net
     ports:
       - 80:80
       - 81:81
@@ -21,22 +21,22 @@ services:
       DB_MYSQL_PASSWORD: ${NPM_DB_USER_PASSWORD:-admin}
       DB_MYSQL_NAME: ${NPM_DB_NAME:-npm}
     volumes:
-      - /volume1/docker/ngnix-proxy/data:/data
-      - /volume1/docker/ngnix-proxy/letsencrypt:/etc/letsencrypt
+      - /volume1/docker/nginx-proxy/data:/data
+      - /volume1/docker/nginx-proxy/letsencrypt:/etc/letsencrypt
     restart: unless-stopped
     depends_on:
       - mariadb
   
   mariadb:
     image: 'jc21/mariadb-aria:latest'
-    container_name: 'ngnix-proxy-db'
+    container_name: 'nginx-proxy-db'
     networks:
-      - ngnix_proxy_net
+      - nginx_proxy_net
     environment:
       MYSQL_ROOT_PASSWORD: ${NPM_DB_ROOT_PASSWORD:-admin}
       MYSQL_DATABASE: ${NPM_DB_NAME:-npm}
       MYSQL_USER: ${NPM_DB_USER:-admin}
       MYSQL_PASSWORD: ${NPM_DB_USER_PASSWORD:-admin}
     volumes:
-      - /volume1/docker/ngnix-proxy/db:/var/lib/mysql
+      - /volume1/docker/nginx-proxy/db:/var/lib/mysql
     restart: unless-stopped
