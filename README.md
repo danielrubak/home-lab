@@ -184,3 +184,22 @@ Follow the steps:
   ```bash
   sudo docker-compose up -d
   ```
+
+## Unifi Controller
+
+Unifi Controller is a software for Unifi devices management. It is required to configure and maintain the network, adopt new devices and manage the WiFi networks and Access Points.
+
+Before installing, you need to create a following directory structure in the docker folder:
+
+```bash
+.
+|-- unifi-controller
+```
+
+Additionally, service setup requires few environment variables. All of them you can find in the `.dev.env` file. Change the values of these variables and a name of the file to `.env`.
+
+| Variable | Description        |
+| -------- | ------------------ |
+| PUID     | process user ID    |
+| PGID     | process group ID   |
+| TZ       | container timezone |

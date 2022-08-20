@@ -50,7 +50,6 @@ services:
       - N8N_METRICS=true
       - NODE_ENV=production
       - WEBHOOK_URL=${N8N_WEBHOOK_URL:?err}
-      - GENERIC_TIMEZONE=Europe/Warsaw
       - DB_TYPE=postgresdb
       - DB_POSTGRESDB_HOST=postgres
       - DB_POSTGRESDB_DATABASE=${POSTGRES_DB:-postgres}

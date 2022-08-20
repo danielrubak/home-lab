@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  unifi-controller:
+    image: lscr.io/linuxserver/unifi-controller:latest
+    container_name: unifi-controller
+    network_mode: bridge
+    ports:
+      - 8080:8080
+      - 8443:8443
+      - 6789:6789
+      - 3478:3478/udp
+      - 10001:10001/udp
+      - 1901:1900/udp
+      - 5514:5514/udp
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ:-Europe/London}
+    volumes:
+      - /volume1/docker/unifi-controller:/config
+    restart: unless-stopped
