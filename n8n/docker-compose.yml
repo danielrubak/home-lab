@@ -56,6 +56,7 @@ services:
       - DB_POSTGRESDB_DATABASE=${POSTGRES_DB:-postgres}
       - DB_POSTGRESDB_USER=${POSTGRES_USER:-postgres}
       - DB_POSTGRESDB_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+      - TZ=Europe/Warsaw
     volumes:
       - /volume1/docker/n8n/n8n:/home/node/.n8n
       - /volume1/docker/n8n/files:/files
