@@ -1,0 +1,36 @@
+networks:
+  calibre_net:
+    driver: bridge
+
+services:
+  calibre-server:
+    image: lscr.io/linuxserver/calibre:latest
+    container_name: calibre-server
+    networks:
+      - calibre_net
+    ports:
+      - 8082:8080
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ:-Europe/London}
+    volumes:
+      - /volume1/docker/calibre/calibre:/config
+      - /volume1/docker/calibre/shared:/shared
+    restart: unless-stopped
+  calibre-web:
+    image: lscr.io/linuxserver/calibre-web
+    container_name: calibre-web
+    networks:
+      - calibre_net
+    ports:
+      - 8083:8083
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ:-Europe/London}
+      - DOCKER_MODS=linuxserver/calibre-web:calibre
+    volumes:
+      - /volume1/docker/calibre/web:/config
+      - /volume1/docker/calibre/calibre/books:/books
+    restart: unless-stopped

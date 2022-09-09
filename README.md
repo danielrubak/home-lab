@@ -22,6 +22,26 @@ The following elements are used in the docker compose config files:
 
 More information about other elements you can find in [Compose Specification](https://docs.docker.com/compose/compose-file/).
 
+## General
+
+### How to find UID and GID
+
+- SSH to your server
+
+  ```bash
+  ssh username@synology-ip
+  ```
+
+- get user ID and group ID
+
+  ```bash
+  id
+  ```
+
+### How to get TZ
+
+You can find your timezone [here](https://timezone.mariushosting.com/).
+
 ## Heimdall
 
 Heimdall is some kind of a dashboard which organise links to all of my services.
@@ -173,6 +193,12 @@ Follow the steps:
   sudo docker rm [CONTAINER_ID]
   ```
 
+- If you want to update container to the higher minor/major version, remove the portainer image:
+
+  ```bash
+  sudo docker rmi <IMAGE_ID>
+  ```
+
 - Change your current working directory
 
   ```bash
@@ -203,3 +229,45 @@ Additionally, service setup requires few environment variables. All of them you 
 | PUID     | process user ID    |
 | PGID     | process group ID   |
 | TZ       | container timezone |
+
+## Calibre
+
+Calibre is an e-book manager. It can view, convert, edit and catalog e-books in all of the major e-book formats.
+Calibre-Web is a web app providing a clean interface for browsing, reading and downloading eBooks using a valid Calibre database.
+
+```bash
+.
+|-- calibre
+|   |-- calibre
+|   |   |-- books
+|   |-- shared
+|   |-- web
+```
+
+Purpose of above directory structure:
+
+- calibre - calibre server configuration
+- books - directory for storing ebooks database
+- shared - symbolic link to the "raw" ebooks directory (optional)
+- web - calibre web client configuration
+
+Additionally, service setup requires few environment variables. All of them you can find in the `.dev.env` file. Change the values of these variables and a name of the file to `.env`.
+
+| Variable | Description        |
+| -------- | ------------------ |
+| PUID     | process user ID    |
+| PGID     | process group ID   |
+| TZ       | container timezone |
+
+### Calibre Server config
+
+1. Go to the address: <http://HOST_IP:8082>
+2. Change the library location to `/config/books`
+3. Select your default ebook device
+
+### Calibre Web config
+
+1. Go to the address: <http://HOST_IP:8083>
+2. Login using `admin` login and `admin123` password
+3. Change the location of Calibre Database to `/books` and click Save
+4. Change the default `admin` password in the profile page and click Save
