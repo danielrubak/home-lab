@@ -15,8 +15,7 @@ services:
       - PGID=${PGID:-1000}
       - TZ=${TZ:-Europe/London}
     volumes:
-      - /volume1/docker/calibre/calibre:/config
-      - /volume1/docker/calibre/shared:/shared
+      - /volume1/docker/calibre/server:/config
     restart: unless-stopped
   calibre-web:
     image: lscr.io/linuxserver/calibre-web
@@ -32,5 +31,5 @@ services:
       - DOCKER_MODS=linuxserver/calibre-web:calibre
     volumes:
       - /volume1/docker/calibre/web:/config
-      - /volume1/docker/calibre/calibre/books:/books
+      - /volume1/docker/calibre/server/books:/books
     restart: unless-stopped

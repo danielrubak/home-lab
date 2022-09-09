@@ -2,6 +2,24 @@
 
 This repository contains the definitions of my home lab services. All of them are running on my Synology 920+ using Docker package from Synology Package Center.
 
+- [home-lab](#home-lab)
+  - [Docker Compose specification](#docker-compose-specification)
+  - [General](#general)
+    - [How to find UID and GID](#how-to-find-uid-and-gid)
+    - [How to get TZ](#how-to-get-tz)
+  - [Heimdall](#heimdall)
+  - [n8n](#n8n)
+    - [flyway](#flyway)
+  - [Nginx Proxy Manager](#nginx-proxy-manager)
+  - [Pihole](#pihole)
+  - [Portainer](#portainer)
+    - [Update the Portainer container](#update-the-portainer-container)
+  - [Unifi Controller](#unifi-controller)
+  - [Calibre](#calibre)
+    - [Calibre Server config](#calibre-server-config)
+    - [Calibre Web config](#calibre-web-config)
+    - [Link the shared folder](#link-the-shared-folder)
+
 ## Docker Compose specification
 
 The following elements are used in the docker compose config files:
@@ -238,15 +256,15 @@ Calibre-Web is a web app providing a clean interface for browsing, reading and d
 ```bash
 .
 |-- calibre
-|   |-- calibre
+|   |-- server
 |   |   |-- books
-|   |-- shared
+|   |   |-- shared
 |   |-- web
 ```
 
 Purpose of above directory structure:
 
-- calibre - calibre server configuration
+- server - calibre server configuration
 - books - directory for storing ebooks database
 - shared - symbolic link to the "raw" ebooks directory (optional)
 - web - calibre web client configuration
@@ -271,3 +289,14 @@ Additionally, service setup requires few environment variables. All of them you 
 2. Login using `admin` login and `admin123` password
 3. Change the location of Calibre Database to `/books` and click Save
 4. Change the default `admin` password in the profile page and click Save
+
+### Link the shared folder
+
+1. Login to your server using SSH
+2. Create symbolic link from your ebooks directory to the `shared` folder
+
+  ```bash
+  sudo mount --bind path/to/ebooks path/to/shared
+  # on Synology you can use sth like this
+  sudo mount --bind path/to/ebooks /volume1/docker/calibre/server/shared
+  ```
