@@ -295,8 +295,14 @@ Additionally, service setup requires few environment variables. All of them you 
 1. Login to your server using SSH
 2. Create symbolic link from your ebooks directory to the `shared` folder
 
-  ```bash
-  sudo mount --bind path/to/ebooks path/to/shared
-  # on Synology you can use sth like this
-  sudo mount --bind path/to/ebooks /volume1/docker/calibre/server/shared
-  ```
+```bash
+sudo mount --bind path/to/ebooks path/to/shared
+# on Synology you can use sth like this
+sudo mount --bind path/to/ebooks /volume1/docker/calibre/server/shared
+```
+
+### Enable Calibre Server auto-merge
+
+1. Go to the address: <http://HOST_IP:8082>
+2. Select `Preferences` from the toolbar, go to `Adding books`, switch to `Adding actions` tab
+3. Check option `Auto-merge added books if they already exists
