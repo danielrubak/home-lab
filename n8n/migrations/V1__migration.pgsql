@@ -25,5 +25,6 @@ CREATE TABLE IF NOT EXISTS workflows.english_learning (
   task_id VARCHAR(50) UNIQUE NOT NULL,
   task_status VARCHAR(50) NOT NULL,
   task_priority INT NOT NULL,
+  notes_task_exists BOOLEAN NOT NULL DEFAULT FALSEm
   event_ts TIMESTAMP NOT NULL
 );

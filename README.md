@@ -19,6 +19,7 @@ This repository contains the definitions of my home lab services. All of them ar
     - [Calibre Server config](#calibre-server-config)
     - [Calibre Web config](#calibre-web-config)
     - [Link the shared folder](#link-the-shared-folder)
+    - [Enable Calibre Server auto-merge](#enable-calibre-server-auto-merge)
 
 ## Docker Compose specification
 
@@ -93,6 +94,12 @@ Purpose of above directory structure:
 - migrations - folder for future db migration files
 - n8n - n8n service configuration
 
+**NOTE!** Because Synology runs docker containers using non root user, you have to change permissions to the `file` folder using following command:
+
+```bash
+sudo chmod 777 -R /volume1/docker/n8n/files
+```
+
 Additionally, service setup requires few environment variables. All of them you can find in the `.dev.env` file. Change the values of these variables and a name of the file to `.env`.
 
 | Variable          | Description                                                                    |
@@ -104,6 +111,7 @@ Additionally, service setup requires few environment variables. All of them you 
 | POSTGRES_DB       | postgres database name                                                         |
 | POSTGRES_USER     | postgres default user                                                          |
 | POSTGRES_PASSWORD | postgres default password                                                      |
+| TZ                | container timezone                                                             |
 
 ### flyway
 
