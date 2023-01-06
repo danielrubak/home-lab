@@ -11,10 +11,13 @@ This repository contains the definitions of my home lab services. All of them ar
   - [n8n](#n8n)
     - [flyway](#flyway)
   - [Nginx Proxy Manager](#nginx-proxy-manager)
+    - [How to configure Nginx Proxy Manager to working with Pihole](#how-to-configure-nginx-proxy-manager-to-working-with-pihole)
+    - [NPM - Troubleshooting](#npm---troubleshooting)
   - [Pihole](#pihole)
   - [Portainer](#portainer)
     - [Update the Portainer container](#update-the-portainer-container)
   - [Unifi Controller](#unifi-controller)
+    - [Unifi - Troubleshooting](#unifi---troubleshooting)
   - [Calibre](#calibre)
     - [Calibre Server config](#calibre-server-config)
     - [Calibre Web config](#calibre-web-config)
@@ -146,6 +149,19 @@ Additionally, service setup requires few environment variables. All of them you 
 | NPM_DB_USER_PASSWORD | mariadb default password   |
 | NPM_DB_NAME          | mariadb database name      |
 
+### How to configure Nginx Proxy Manager to working with Pihole
+
+1. Login into the admin page of pihole, on the navigation menu click on `Local DNS`, `DNS Records` and add a record which redirects all request of your domain to your NPM host IP
+2. Switch on `CNAME Records` and create records for all your containers using the DNS Record fro mthe previous step
+3. It is required to add the Pihole IP to your router DNS configuration
+4. Add the port forwarding rule to your router configuration and forward all HTTP requests to port 80 on the machine where you hosted NPM container
+
+### NPM - Troubleshooting
+
+1. No requests are redirected to the right nginx entry
+
+- open terminal and eval `ipconfig /flushdns`
+
 ## Pihole
 
 Pi-hole is an application for blocking advertisements and a DNS server.
@@ -256,6 +272,19 @@ Additionally, service setup requires few environment variables. All of them you 
 | PGID     | process group ID   |
 | TZ       | container timezone |
 
+### Unifi - Troubleshooting
+
+1.New device stack in the "Adopting" phase
+
+- Go to the Unifi Controller page
+- Click on `Settings`, next on `System`, find `Legacy Interface` option and enable it
+- You will be redirected to the previous version of Unifi Controller version
+- Click on `Settings`, next on `Network Application`, in `NETWORK APPLICATION SETTINGS` section find `Network application Hostname/IP` option and enter the IP of Unifi Controller host
+- Enable option `Override inform host with the Network application hostname/IP.` and click button `APPLY CHANGES`
+- Switch to `Devices` tab and check if the device is already adopted
+  - If not restore the device to the Factory Defaults (press and hold the reset button for 10 seconds)
+- Click on `Settings`, next on `User Interface`, find `New User Interface` option, turn it on and click button `APPLY CHANGES`
+
 ## Calibre
 
 Calibre is an e-book manager. It can view, convert, edit and catalog e-books in all of the major e-book formats.
@@ -311,6 +340,8 @@ sudo mount --bind path/to/ebooks /volume1/docker/calibre/server/shared
 
 ### Enable Calibre Server auto-merge
 
+Auto-merge is a feature that groups books of multiple different formats into one entry on library.
+
 1. Go to the address: <http://HOST_IP:8082>
 2. Select `Preferences` from the toolbar, go to `Adding books`, switch to `Adding actions` tab
-3. Check option `Auto-merge added books if they already exists
+3. Check option `Auto-merge added books if they already exists`
